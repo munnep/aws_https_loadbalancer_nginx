@@ -56,22 +56,39 @@ runcmd:
 
 ![](media/2021-12-08-14-26-32.png)    
 ![](media/2021-12-08-14-27-07.png)  
+- Import the certificate you want to use on the load balancer
+- Go to AWS Certificate Manager  
+![](media/2022-04-05-11-37-10.png)  
+- Select import
+- Copy your certificate information in   
+![](media/2022-04-05-11-38-27.png)  
+- give the tag a name  
+![](media/2022-04-05-11-39-00.png)  
+- review and select import  
+![](media/2022-04-05-11-39-23.png)  
+- Certificate should now be available
+![](media/2022-04-05-11-39-57.png)  
 - loadbalancer create a target group  
 ![](media/2021-12-08-14-32-27.png)    
 ![](media/2021-12-08-14-31-55.png)    
 ![](media/2021-12-08-14-33-05.png)    
-- loadbalancer create a appplication load balancer  
+- Load balancer - Application  
 ![](media/2021-12-08-14-29-33.png)    
 ![](media/2021-12-08-14-30-02.png)    
-![](media/2021-12-08-14-30-26.png)    
-![](media/2021-12-08-14-30-47.png)    
-![](media/2021-12-08-14-33-33.png)    
-- loadbalancer generated a DNS name which you can use to connect to the application server  
-![](media/2021-12-08-15-36-38.png)  
-[patrick-loadbalancer-1479571194.us-east-1.elb.amazonaws.com](patrick-loadbalancer-1479571194.us-east-1.elb.amazonaws.com)
-
-
-
+![](media/2022-04-05-11-47-17.png)  
+select you security group
+![](media/2022-04-05-11-47-33.png)  
+Listener should listen for https and forward it to your target group    
+![](media/2022-04-05-11-49-15.png)  
+Choose to use the certificate that you imported in ACM  
+![](media/2022-04-05-11-49-44.png)  
+- loadbalancer generated a DNS name. If you connect to that name with https you will get an error stating that the name certificate is not valid  
+![](media/2022-04-05-11-54-10.png)  
+- Go to route53 and change your dns record to point to the dns name of the loadbalancer    
+![](media/2022-04-05-11-55-20.png)  
+- Wait for a few moments and then you will be able to successfully connect    
+https://patrick.bg.hashicorp-success.com/  
+![](media/2022-04-05-12-03-52.png)   
 
 
 
