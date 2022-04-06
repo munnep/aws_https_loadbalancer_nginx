@@ -1,3 +1,3 @@
-# output "http_link" {
-#   value = "http://${aws_lb.lb_application.dns_name}"
-# }
+output "https_link" {
+  value = "https://${var.dns_name_website}.${var.dns_name_zone}"
+}

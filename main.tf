@@ -240,3 +240,16 @@ resource "aws_lb_listener" "front_end" {
     target_group_arn = aws_lb_target_group.lb_target_group.arn
   }
 }
+
+data "aws_route53_zone" "selected" {
+  name         = var.dns_name_zone
+  private_zone = false
+}
+
+resource "aws_route53_record" "www" {
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = var.dns_name_website
+  type    = "CNAME"
+  ttl     = "300"
+  records = [aws_lb.lb_application.dns_name]
+}
