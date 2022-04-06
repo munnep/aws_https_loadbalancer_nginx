@@ -241,8 +241,13 @@ resource "aws_lb_listener" "front_end" {
   }
 }
 
+data "aws_route53_zone" "selected" {
+  name         = var.dns_name_zone
+  private_zone = false
+}
+
 resource "aws_route53_record" "www" {
-  zone_id = "Z10QHT9XL7XFZU"
+  zone_id = data.aws_route53_zone.selected.zone_id
   name    = var.dns_name_website
   type    = "CNAME"
   ttl     = "300"

@@ -18,20 +18,25 @@ variable "ami" {
 
 variable "certificate_private_key_file" {
   type        = string
-  description = "(optional) describe your variable"
+  description = "certificate private key"
 }
 
 variable "certificate_body_file" {
   type        = string
-  description = "(optional) describe your variable"
+  description = "certificate body"
 }
 
 variable "certificate_chain_file" {
   type        = string
-  description = "(optional) describe your variable"
+  description = "certificate chain"
 }
 
 variable "dns_name_website" {
   type        = string
   description = "DNS name you use to access the website"
+}
+
+variable "dns_name_zone" {
+  type        = string
+  description = "DNS zone the record should be created in"
 }
