@@ -31,3 +31,7 @@ variable "certificate_chain_file" {
   description = "(optional) describe your variable"
 }
 
+variable "dns_name_website" {
+  type        = string
+  description = "DNS name you use to access the website"
+}
