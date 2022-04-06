@@ -200,40 +200,43 @@ resource "aws_acm_certificate" "cert" {
 
 
 
-# # loadbalancer Target Group
-# resource "aws_lb_target_group" "lb_target_group" {
-#   name     = "${var.tag_prefix}-target-group"
-#   port     = 80
-#   protocol = "HTTP"
-#   vpc_id   = aws_vpc.main.id
-# }
+# loadbalancer Target Group
+resource "aws_lb_target_group" "lb_target_group" {
+  name     = "${var.tag_prefix}-target-group"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.main.id
+}
 
-# resource "aws_lb_target_group_attachment" "lb_target_group_attachment" {
-#   target_group_arn = aws_lb_target_group.lb_target_group.arn
-#   target_id        = aws_instance.web_server.id
-#   port             = 80
-# }
+resource "aws_lb_target_group_attachment" "lb_target_group_attachment" {
+  target_group_arn = aws_lb_target_group.lb_target_group.arn
+  target_id        = aws_instance.web_server.id
+  port             = 80
+}
 
 # # application load balancer
-# resource "aws_lb" "lb_application" {
-#   name               = "${var.tag_prefix}-lb"
-#   internal           = false
-#   load_balancer_type = "application"
-#   security_groups    = [aws_security_group.web_server_sg.id]
-#   subnets            = [aws_subnet.public1.id, aws_subnet.public2.id]
+resource "aws_lb" "lb_application" {
+  name               = "${var.tag_prefix}-lb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.web_server_sg.id]
+  subnets            = [aws_subnet.public1.id, aws_subnet.public2.id]
 
-#   tags = {
-#     Environment = "${var.tag_prefix}-lb"
-#   }
-# }
+  tags = {
+    Environment = "${var.tag_prefix}-lb"
+  }
+}
 
-# resource "aws_lb_listener" "front_end" {
-#   load_balancer_arn = aws_lb.lb_application.arn
-#   port              = "80"
-#   protocol          = "HTTP"
+resource "aws_lb_listener" "front_end" {
+  load_balancer_arn = aws_lb.lb_application.arn
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = aws_acm_certificate.cert.arn
 
-#   default_action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.lb_target_group.arn
-#   }
-# }
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.lb_target_group.arn
+  }
+}
