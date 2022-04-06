@@ -146,48 +146,48 @@ resource "aws_security_group" "web_server_sg" {
 
 
 
-# resource "aws_network_interface" "web-priv" {
-#   subnet_id   = aws_subnet.private.id
-#   private_ips = [cidrhost(cidrsubnet(var.vpc_cidr, 8, 11),22)]
+resource "aws_network_interface" "web-priv" {
+  subnet_id   = aws_subnet.private.id
+  private_ips = [cidrhost(cidrsubnet(var.vpc_cidr, 8, 11),22)]
 
-#   tags = {
-#     Name = "primary_network_interface"
-#   }
-# }
+  tags = {
+    Name = "primary_network_interface"
+  }
+}
 
-# data "cloudinit_config" "server_config" {
-#   gzip          = true
-#   base64_encode = true
-#   part {
-#     content_type = "text/cloud-config"
-#     content      = file("${path.module}/scripts/webserver.yml")
-#   }
-# }
-
-
-
-# resource "aws_instance" "web_server" {
-#   ami           = var.ami
-#   instance_type = "t2.micro"
-#   # key_name      = "${var.tag_prefix}-key-pair"
-
-#   network_interface {
-#     network_interface_id = aws_network_interface.web-priv.id
-#     device_index         = 0
-#   }
-
-#   user_data = data.cloudinit_config.server_config.rendered
-#   tags = {
-#     Name = "${var.tag_prefix}-webserver"
-#   }
-# }
+data "cloudinit_config" "server_config" {
+  gzip          = true
+  base64_encode = true
+  part {
+    content_type = "text/cloud-config"
+    content      = file("${path.module}/scripts/webserver.yml")
+  }
+}
 
 
 
-# resource "aws_network_interface_sg_attachment" "sg_attachment" {
-#   security_group_id    = aws_security_group.web_server_sg.id
-#   network_interface_id = aws_network_interface.web-priv.id
-# }
+resource "aws_instance" "web_server" {
+  ami           = var.ami
+  instance_type = "t2.micro"
+  # key_name      = "${var.tag_prefix}-key-pair"
+
+  network_interface {
+    network_interface_id = aws_network_interface.web-priv.id
+    device_index         = 0
+  }
+
+  user_data = data.cloudinit_config.server_config.rendered
+  tags = {
+    Name = "${var.tag_prefix}-webserver"
+  }
+}
+
+
+
+resource "aws_network_interface_sg_attachment" "sg_attachment" {
+  security_group_id    = aws_security_group.web_server_sg.id
+  network_interface_id = aws_network_interface.web-priv.id
+}
 
 # # loadbalancer Target Group
 # resource "aws_lb_target_group" "lb_target_group" {
