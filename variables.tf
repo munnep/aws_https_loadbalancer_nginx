@@ -11,7 +11,7 @@ variable "vpc_cidr" {
   description = "which private subnet do you want to use for the VPC. Subnet mask of /16"
 }
 
-# variable "ami" {
-#   default     = "ami-0a49b025fffbbdac6"
-#   description = "Must be an Ubuntu image that is available in the region you choose"
-# }
+variable "ami" {
+  default     = "ami-0c6ebbd55ab05f070"
+  description = "Must be an Ubuntu image that is available in the region you choose"
+}
