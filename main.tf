@@ -246,13 +246,13 @@ resource "aws_lb_listener" "front_end" {
 }
 
 data "aws_route53_zone" "selected" {
-  name         = var.dns_name_zone
+  name         = var.dns_zonename
   private_zone = false
 }
 
 resource "aws_route53_record" "www" {
   zone_id = data.aws_route53_zone.selected.zone_id
-  name    = var.dns_name_website
+  name    = var.dns_hostname
   type    = "CNAME"
   ttl     = "300"
   records = [aws_lb.lb_application.dns_name]
