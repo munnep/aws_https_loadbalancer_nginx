@@ -169,10 +169,6 @@ data "cloudinit_config" "server_config" {
   }
 }
 
-
-
-
-
 # code idea from https://itnext.io/lets-encrypt-certs-with-terraform-f870def3ce6d
 data "aws_route53_zone" "base_domain" {
   name = var.dns_zonename
