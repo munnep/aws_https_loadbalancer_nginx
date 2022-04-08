@@ -5,7 +5,7 @@ In this repository you will deploy a webserver behind an application load balanc
 Steps involved are: 
 - Create a VPC with subnets, routing tables, internet gateway and nat gateway
 - Creating an EC2 instance with Ubuntu in a private subnet with no public ip address
-- Creating a Security group that allows traffic over port 80 and 443 to the load balancer and webserver
+- Creating a Security group that allows traffic over port 80 and 443. Loadbalancer listens on port 443 and webserver on port 80
 - Create an application load balancer to forward https traffic to the web server in the private subnet
 - Point the DNS name for the website to the load balancer DNS name
 
@@ -90,9 +90,9 @@ https_link = "https://patrick.bg.hashicorp-success.com"
 - [x] route table association with the subnets 
 - [x] security group for allowing port 80 and 443
 - [x] create ec2 instance without public ip, only private subnet
+- [x] import TLS certificate
+- [x] create a LB (check Application Load Balancer or Network Load Balancer)
+- [x] publish a service over LB, ie nginx
+- [x] create DNS CNAME for website to loadbalancer DNS
 
 # to do
-- [] import TLS certificate
-- [] create a LB (check Application Load Balancer or Network Load Balancer)
-- [] publish a service over LB, ie nginx
-- [] create DNS CNAME for website to loadbalancer DNS
