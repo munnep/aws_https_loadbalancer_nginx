@@ -172,6 +172,44 @@ data "cloudinit_config" "server_config" {
 
 
 
+
+# code idea from https://itnext.io/lets-encrypt-certs-with-terraform-f870def3ce6d
+data "aws_route53_zone" "base_domain" {
+  name = var.dns_zonename
+}
+
+resource "tls_private_key" "private_key" {
+  algorithm = "RSA"
+}
+
+resource "acme_registration" "registration" {
+  account_key_pem = tls_private_key.private_key.private_key_pem
+  email_address   = var.certificate_email
+}
+
+resource "acme_certificate" "certificate" {
+  account_key_pem = acme_registration.registration.account_key_pem
+  common_name     = "${var.dns_hostname}.${var.dns_zonename}"
+
+  dns_challenge {
+    provider = "route53"
+
+    config = {
+      AWS_HOSTED_ZONE_ID = data.aws_route53_zone.base_domain.zone_id
+    }
+  }
+
+  depends_on = [acme_registration.registration]
+}
+
+
+
+resource "aws_acm_certificate" "cert" {
+  certificate_body  = acme_certificate.certificate.certificate_pem
+  private_key       = acme_certificate.certificate.private_key_pem
+  certificate_chain = acme_certificate.certificate.issuer_pem
+}
+
 resource "aws_instance" "web_server" {
   ami           = var.ami
   instance_type = "t2.micro"
@@ -191,18 +229,6 @@ resource "aws_instance" "web_server" {
     aws_network_interface_sg_attachment.sg_attachment, aws_nat_gateway.NAT
   ]
 }
-
-
-
-
-resource "aws_acm_certificate" "cert" {
-  private_key       = file("${path.module}/certificates/${var.certificate_private_key_file}")
-  certificate_body  = file("${path.module}/certificates/${var.certificate_body_file}")
-  certificate_chain = file("${path.module}/certificates/${var.certificate_chain_file}")
-}
-
-
-
 
 # loadbalancer Target Group
 resource "aws_lb_target_group" "lb_target_group" {

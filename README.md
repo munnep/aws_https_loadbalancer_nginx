@@ -6,7 +6,7 @@ Steps involved are:
 - Create a VPC with subnets, routing tables, internet gateway and nat gateway
 - Creating an EC2 instance with Ubuntu in a private subnet with no public ip address
 - Creating a Security group that allows traffic over port 80 and 443. Loadbalancer listens on port 443 and webserver on port 80
-- Create an application load balancer to forward https traffic to the web server in the private subnet
+- Create an application load balancer to handle https traffic to the web server in the private subnet
 - Point the DNS name for the website to the load balancer DNS name
 
 Detailed diagram of the environment:  
